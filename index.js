@@ -1,3 +1,5 @@
-import compareFiles from './src/compareFiles.js'
+#!/usr/bin/env node
+import runGendiff from './bin/gendiff.js';
 
-export default compareFiles;
+runGendiff(process.argv);
+
