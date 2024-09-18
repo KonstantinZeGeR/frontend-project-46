@@ -1,12 +1,4 @@
-import _ from 'lodash';
-import fs from 'fs';
-import path from 'path';
-
-const readFile = (filepath) => {
-  const absolutePath = path.resolve(process.cwd(), filepath);
-  const fileContent = fs.readFileSync(absolutePath, 'utf-8');
-  return JSON.parse(fileContent);
-};
+import _ from "lodash";
 
 const generateDiff = (data1, data2) => {
   const keys = _.union(_.keys(data1), _.keys(data2)).sort();
@@ -26,7 +18,7 @@ const generateDiff = (data1, data2) => {
     return `    ${key}: ${data1[key]}`;
   });
 
-  return `{\n${_.flatten(lines).join('\n')}\n}`;
+  return `{\n${_.flatten(lines).join("\n")}\n}`;
 };
 
-export { readFile, generateDiff };
+export default generateDiff;
