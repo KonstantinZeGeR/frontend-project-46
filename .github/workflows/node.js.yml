@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node CI
 
 on:
   push:
@@ -33,4 +33,4 @@ jobs:
       - name: Send coverage to Code Climate
         env:
           CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_TOKEN }}
-        run: npx codeclimate-test-reporter
+        run: npx codeclimate-test-reporter < coverage/lcov.info

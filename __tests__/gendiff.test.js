@@ -1,6 +1,6 @@
-import genDiff from '../src/generateDiff.js';
 import fs from 'fs';
 import path from 'path';
+import genDiff from '../src/index.js';
 
 const getFixturePath = (filename) => path.join(__dirname, '__fixtures__', filename);
 
@@ -17,7 +17,7 @@ const expectedOutput = `{
 test('genDiff should return correct diff', () => {
   const data1 = JSON.parse(fs.readFileSync(jsonFile1));
   const data2 = JSON.parse(fs.readFileSync(jsonFile2));
-  
+
   const diff = genDiff(data1, data2);
-  expect(diff).toBe(expectedOutput);
+  expect(diff).toEqual(expectedOutput);
 });
