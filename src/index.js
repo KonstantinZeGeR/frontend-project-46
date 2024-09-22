@@ -1,24 +1,15 @@
-import _ from 'lodash';
+import parse from './parsers.js';
+import buildDiff from './buildDiff.js';
+import format from './formatters/index.js';
 
-const generateDiff = (data1, data2) => {
-  const keys = _.union(_.keys(data1), _.keys(data2)).sort();
-  const lines = keys.map((key) => {
-    if (!_.has(data2, key)) {
-      return `  - ${key}: ${data1[key]}`;
-    }
+const genDiff = (filepath1, filepath2, formatterName = 'stylish') => {
+  const data1 = parse(filepath1);
+  const data2 = parse(filepath2);
 
-    if (!_.has(data1, key)) {
-      return `  + ${key}: ${data2[key]}`;
-    }
+  const diffTree = buildDiff(data1, data2);
+  const result = format(diffTree, formatterName);
 
-    if (data1[key] !== data2[key]) {
-      return [`  - ${key}: ${data1[key]}`, `  + ${key}: ${data2[key]}`];
-    }
-
-    return `    ${key}: ${data1[key]}`;
-  });
-
-  return `{\n${_.flatten(lines).join('\n')}\n}`;
+  return result;
 };
 
-export default generateDiff;
+export default genDiff;

@@ -1,23 +1,27 @@
-import fs from 'fs';
+import { fileURLToPath } from 'url';
 import path from 'path';
+import { expect, test } from '@jest/globals';
+import fs from 'fs';
 import genDiff from '../src/index.js';
 
-const getFixturePath = (filename) => path.join(__dirname, '__fixtures__', filename);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const jsonFile1 = getFixturePath('file1.json');
-const jsonFile2 = getFixturePath('file2.json');
-const expectedOutput = `{
-  - follow: false
-  - proxy: 123.234.53.22
-  - timeout: 50
-  + timeout: 20
-  + verbose: true
-}`;
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const readFile = (filename) => fs.readFileSync(filename, 'utf-8');
 
-test('genDiff should return correct diff', () => {
-  const data1 = JSON.parse(fs.readFileSync(jsonFile1));
-  const data2 = JSON.parse(fs.readFileSync(jsonFile2));
+test('gendiff for nested JSON files', () => {
+  const filepath1 = getFixturePath('file1.json');
+  const filepath2 = getFixturePath('file2.json');
+  const expected = readFile(getFixturePath('expected_nested.txt'));
 
-  const diff = genDiff(data1, data2);
-  expect(diff).toEqual(expectedOutput);
+  expect(genDiff(filepath1, filepath2)).toBe(expected);
+});
+
+test('gendiff for nested YAML files', () => {
+  const filepath1 = getFixturePath('file1.yml');
+  const filepath2 = getFixturePath('file2.yml');
+  const expected = readFile(getFixturePath('expected_nested.txt'));
+  console.log('Expected:', expected);
+  expect(genDiff(filepath1, filepath2)).toBe(expected);
 });
