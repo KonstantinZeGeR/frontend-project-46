@@ -1,17 +1,16 @@
-import { fileURLToPath } from "url";
-import path from "path";
-import { expect, test } from "@jest/globals";
-import genDiff from "../src/index.js";
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { expect, test } from '@jest/globals';
+import genDiff from '../src/index.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const getFixturePath = (filename) =>
-  path.join(__dirname, "..", "__fixtures__", filename);
+const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
-test("gendiff for flat YAML files", () => {
-  const filepath1 = getFixturePath("file1.yml");
-  const filepath2 = getFixturePath("file2.yml");
+test('gendiff for flat YAML files', () => {
+  const filepath1 = getFixturePath('file1.yml');
+  const filepath2 = getFixturePath('file2.yml');
   const expected = `{
   - follow: false
   host: hexlet.io

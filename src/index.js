@@ -22,4 +22,3 @@ const generateDiff = (data1, data2) => {
 };
 
 export default generateDiff;
-
