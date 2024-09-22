@@ -2,16 +2,19 @@
 
 import _ from 'lodash';
 
+const getIndent = (depth, spacesPerLevel = 4) => ' '.repeat(depth * spacesPerLevel - 2);
+const getBracketIndent = (depth, spacesPerLevel = 4) => ' '.repeat((depth - 1) * spacesPerLevel);
+
 // Функция stringify
+
 const stringify = (data, depth) => {
   if (!_.isPlainObject(data)) {
     return String(data);
   }
 
   const spacesPerLevel = 4;
-  const indentSize = depth * spacesPerLevel - 2;
-  const currentIndent = ' '.repeat(indentSize + 2);
-  const bracketIndent = ' '.repeat(indentSize);
+  const currentIndent = getIndent(depth, spacesPerLevel);
+  const bracketIndent = getBracketIndent(depth, spacesPerLevel);
 
   const lines = Object
     .entries(data)
@@ -23,7 +26,7 @@ const stringify = (data, depth) => {
 // Функция stylish
 const stylish = (tree, depth = 1) => {
   const spacesPerLevel = 4;
-  const currentIndent = ' '.repeat(depth * spacesPerLevel - 2);
+  const currentIndent = getIndent(depth, spacesPerLevel);
 
   const lines = tree.flatMap((node) => {
     const {
@@ -49,7 +52,7 @@ const stylish = (tree, depth = 1) => {
     }
   });
 
-  const bracketIndent = ' '.repeat((depth - 1) * spacesPerLevel - 2 + 2);
+  const bracketIndent = getBracketIndent(depth, spacesPerLevel);
   return ['{', ...lines, `${bracketIndent}}`].join('\n');
 };
 

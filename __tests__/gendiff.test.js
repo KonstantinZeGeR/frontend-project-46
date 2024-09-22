@@ -15,13 +15,12 @@ test('gendiff for nested JSON files', () => {
   const filepath2 = getFixturePath('file2.json');
   const expected = readFile(getFixturePath('expected_nested.txt'));
 
-  expect(genDiff(filepath1, filepath2)).toBe(expected);
+  expect(genDiff(filepath1, filepath2)).toEqual(expected);
 });
 
 test('gendiff for nested YAML files', () => {
   const filepath1 = getFixturePath('file1.yml');
   const filepath2 = getFixturePath('file2.yml');
   const expected = readFile(getFixturePath('expected_nested.txt'));
-  console.log('Expected:', expected);
-  expect(genDiff(filepath1, filepath2)).toBe(expected);
+  expect(genDiff(filepath1, filepath2)).toEqual(expected);
 });
