@@ -40,7 +40,7 @@ const formatStylish = (diffTree) => {
           return getLine(key, stringify(item.value, depth), depth, '-');
         case 'unchanged':
           return getLine(key, stringify(item.value, depth), depth, ' ');
-        case 'changed':
+        case 'updated':
           return [
             getLine(key, stringify(item.oldValue, depth), depth, '-'),
             getLine(key, stringify(item.newValue, depth), depth, '+'),

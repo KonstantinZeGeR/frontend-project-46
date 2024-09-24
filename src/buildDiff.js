@@ -22,7 +22,7 @@ const buildDiff = (data1, data2) => {
     if (!_.isEqual(value1, value2)) {
       return {
         key,
-        type: 'changed', // Изменено с 'updated' на 'changed'
+        type: 'updated', // Изменено с 'updated' на 'changed'
         oldValue: value1, // Переименовано с 'valueBefore' на 'oldValue'
         newValue: value2, // Переименовано с 'valueAfter' на 'newValue'
       };

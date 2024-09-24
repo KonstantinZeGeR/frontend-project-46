@@ -20,8 +20,8 @@ const plain = (diffTree) => {
           )}`;
         case 'removed':
           return `Property '${property}' was removed`;
-        case 'changed':
-          return `Property '${property}' was changed. From ${formatValue(
+        case 'updated':
+          return `Property '${property}' was updated. From ${formatValue(
             item.oldValue,
           )} to ${formatValue(item.newValue)}`;
         case 'nested':
