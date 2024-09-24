@@ -1,59 +1,58 @@
-// src/formatters/stylish.js
-
 import _ from 'lodash';
 
-const getIndent = (depth, spacesPerLevel = 4) => ' '.repeat(depth * spacesPerLevel - 2);
-const getBracketIndent = (depth, spacesPerLevel = 4) => ' '.repeat((depth - 1) * spacesPerLevel);
+const getIndent = (depth, spacesCount = 4) => ' '.repeat(depth * spacesCount);
 
-// Функция stringify
+const getLine = (key, value, depth, sign) => {
+  const indentSize = depth * 4 - 2;
+  const currentIndent = ' '.repeat(indentSize);
+  const line = `${currentIndent}${sign} ${key}: ${value}`;
+  return line;
+};
 
 const stringify = (data, depth) => {
-  if (!_.isPlainObject(data)) {
+  if (!_.isObject(data)) {
     return String(data);
   }
-
-  const spacesPerLevel = 4;
-  const currentIndent = getIndent(depth, spacesPerLevel);
-  const bracketIndent = getBracketIndent(depth, spacesPerLevel);
-
-  const lines = Object
-    .entries(data)
-    .map(([key, value]) => `${currentIndent}${key}: ${stringify(value, depth + 1)}`);
-
-  return ['{', ...lines, `${bracketIndent}}`].join('\n');
-};
-
-// Функция stylish
-const stylish = (tree, depth = 1) => {
-  const spacesPerLevel = 4;
-  const currentIndent = getIndent(depth, spacesPerLevel);
-
-  const lines = tree.flatMap((node) => {
-    const {
-      key, type, value, valueBefore, valueAfter, children,
-    } = node;
-
-    switch (type) {
-      case 'added':
-        return `${currentIndent}+ ${key}: ${stringify(value, depth + 1)}`;
-      case 'removed':
-        return `${currentIndent}- ${key}: ${stringify(value, depth + 1)}`;
-      case 'updated':
-        return [
-          `${currentIndent}- ${key}: ${stringify(valueBefore, depth + 1)}`,
-          `${currentIndent}+ ${key}: ${stringify(valueAfter, depth + 1)}`,
-        ].join('\n');
-      case 'unchanged':
-        return `${currentIndent}  ${key}: ${stringify(value, depth + 1)}`;
-      case 'nested':
-        return `${currentIndent}  ${key}: ${stylish(children, depth + 1)}`;
-      default:
-        throw new Error(`Unknown type: ${type}`);
-    }
+  const keys = Object.keys(data);
+  const lines = keys.map((key) => {
+    const value = data[key];
+    const stringValue = stringify(value, depth + 1);
+    const line = getLine(key, stringValue, depth + 1, ' ');
+    return line;
   });
-
-  const bracketIndent = getBracketIndent(depth, spacesPerLevel);
-  return ['{', ...lines, `${bracketIndent}}`].join('\n');
+  const indent = getIndent(depth);
+  return `{\n${lines.join('\n')}\n${indent}}`;
 };
 
-export default (diffTree) => stylish(diffTree);
+const formatStylish = (diffTree) => {
+  const iter = (node, depth) => {
+    const lines = node.flatMap((item) => {
+      const { key, type } = item;
+      const indentSize = depth * 4 - 2;
+      const currentIndent = ' '.repeat(indentSize);
+      const nestedIndent = getIndent(depth);
+      switch (type) {
+        case 'nested':
+          return `${currentIndent}  ${key}: {\n${iter(item.children, depth + 1)}\n${nestedIndent}}`;
+        case 'added':
+          return getLine(key, stringify(item.value, depth), depth, '+');
+        case 'removed':
+          return getLine(key, stringify(item.value, depth), depth, '-');
+        case 'unchanged':
+          return getLine(key, stringify(item.value, depth), depth, ' ');
+        case 'changed':
+          return [
+            getLine(key, stringify(item.oldValue, depth), depth, '-'),
+            getLine(key, stringify(item.newValue, depth), depth, '+'),
+          ];
+        default:
+          throw new Error(`Unknown type: ${type}`);
+      }
+    });
+    return lines.join('\n');
+  };
+
+  return `{\n${iter(diffTree, 1)}\n}`;
+};
+
+export default formatStylish;
