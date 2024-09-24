@@ -1,5 +1,3 @@
-// src/buildDiff.js
-
 import _ from 'lodash';
 
 const buildDiff = (data1, data2) => {

@@ -24,3 +24,11 @@ test('gendiff for nested YAML files', () => {
   const expected = readFile(getFixturePath('expected_nested.txt'));
   expect(genDiff(filepath1, filepath2)).toEqual(expected);
 });
+
+test('genDiff plain format', () => {
+  const filepath1 = getFixturePath('file1.json');
+  const filepath2 = getFixturePath('file2.json');
+  const expected = fs.readFileSync(getFixturePath('expected_plain.txt'), 'utf-8');
+  const result = genDiff(filepath1, filepath2, 'plain');
+  expect(result).toBe(expected);
+});
