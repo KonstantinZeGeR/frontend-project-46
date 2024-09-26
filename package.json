@@ -6,6 +6,13 @@
   "bin": {
     "gendiff": "./bin/gendiff.js"
   },
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "lcov",
+      "text"
+    ]
+  },
   "type": "module",
   "scripts": {
     "test": "jest --coverage",
