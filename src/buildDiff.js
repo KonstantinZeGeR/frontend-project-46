@@ -30,7 +30,6 @@ const buildDiff = (data1, data2) => {
 
     return { key, type: 'unchanged', value: value1 };
   });
-
   return result;
 };
 

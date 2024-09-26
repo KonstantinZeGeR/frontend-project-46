@@ -30,5 +30,6 @@ test('genDiff plain format', () => {
   const filepath2 = getFixturePath('file2.json');
   const expected = fs.readFileSync(getFixturePath('expected_plain.txt'), 'utf-8');
   const result = genDiff(filepath1, filepath2, 'plain');
+  console.log(result);
   expect(result).toEqual(expected);
 });

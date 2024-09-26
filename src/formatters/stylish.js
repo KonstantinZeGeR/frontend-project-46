@@ -51,8 +51,6 @@ const formatStylish = (diffTree) => {
     });
     return lines.join('\n');
   };
-
   return `{\n${iter(diffTree, 1)}\n}`;
 };
-
 export default formatStylish;
