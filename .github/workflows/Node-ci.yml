@@ -23,12 +23,17 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      - run: echo "Starting make install"
       - run: make install
+
+      - run: echo "Starting make lint"
       - run: make lint
+
+      - run: echo "Starting make test"
       - run: make test
         continue-on-error: true
 
       - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v5.0.0
+        uses: paambaati/codeclimate-action@v8.0.0  # обновлённая версия
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
